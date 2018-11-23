@@ -1,0 +1,31 @@
+{
+  "name": "lottie-lint",
+  "version": "0.2.0",
+  "description": "lottie lint",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "babel src -d lib",
+    "test": "mocha --require intelli-espower-loader test/**/*.test.js"
+  },
+  "keywords": [
+    "lottie",
+    "lint",
+    "performance"
+  ],
+  "files": [
+    "lib"
+  ],
+  "author": "lottie lint team",
+  "license": "MIT",
+  "dependencies": {
+    "semver": "^5.6.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
+    "intelli-espower-loader": "^1.0.1",
+    "mocha": "^5.2.0",
+    "power-assert": "^1.6.1"
+  }
+}
