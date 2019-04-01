@@ -1,5 +1,5 @@
 
-exports.layer = {
+exports.layerMapping = {
   LayerType: {
     Precomp: 0,
     Solid: 1,
@@ -16,4 +16,14 @@ exports.layer = {
     Invert: 2,
     Unknown: 3,
   },
+
+  maskMode: {
+    None: 'n',
+    Additive: 'a',
+    Subtract: 's',
+    Intersect: 'i',
+    Lighten: 'l',
+    Darken: 'd',
+    Difference: 'f',
+  }
 };
