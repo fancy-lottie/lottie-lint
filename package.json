@@ -4,7 +4,7 @@
   "description": "lottie lint",
   "main": "lib/index.js",
   "scripts": {
-    "build": "babel src -d lib",
+    "build": "rm -fr ./lib && babel src -d lib",
     "lint": "eslint src test",
     "test": "mocha --require intelli-espower-loader test/**/*.test.js"
   },
