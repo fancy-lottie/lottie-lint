@@ -1,3 +1,4 @@
+'use strict';
 
 const linter = require('..');
 const matte = require('./matte.json');

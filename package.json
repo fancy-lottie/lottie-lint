@@ -4,7 +4,8 @@
   "description": "lottie lint",
   "main": "lib/index.js",
   "scripts": {
-    "build": "babel src -d lib",
+    "build": "rm -fr ./lib && babel src -d lib",
+    "lint": "eslint src test",
     "test": "mocha --require intelli-espower-loader test/**/*.test.js"
   },
   "keywords": [
@@ -24,7 +25,8 @@
     "@babel/cli": "^7.1.5",
     "@babel/core": "^7.1.6",
     "@babel/preset-env": "^7.1.6",
-    "eslint": "^5.16.0",
+    "eslint": "^5.15.3",
+    "eslint-config-egg": "^7.2.0",
     "intelli-espower-loader": "^1.0.1",
     "mocha": "^5.2.0",
     "power-assert": "^1.6.1"

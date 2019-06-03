@@ -1,3 +1,4 @@
+'use strict';
 
 exports.layerMapping = {
   LayerType: {
@@ -25,5 +26,5 @@ exports.layerMapping = {
     Lighten: 'l',
     Darken: 'd',
     Difference: 'f',
-  }
+  },
 };

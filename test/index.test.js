@@ -20,12 +20,12 @@ describe('linter', function() {
   it('Layer Effects 检测', () => {
     const matteJSON = require('./case_data/layerEffects.json');
     const reports = linter(matteJSON).reports;
-    
+
     assert.deepStrictEqual(reports, [{
       message: '兼容性警告⚠️: 当前图层存在 Layer Effects，在 iOS 和 Android 上不支持',
       rule: 'incompatible_layer_effects',
       name: 'shadow',
-      path: '#/layers[11]'
+      path: '#/layers[11]',
     }]);
   });
 });
