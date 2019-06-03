@@ -1,3 +1,5 @@
+'use strict';
+
 const semver = require('semver');
 const utils = require('./utils');
 const { layerMapping } = require('./c');
@@ -24,7 +26,7 @@ class LottieLint {
       };
 
       this.reports.push(report);
-      this.json.report = [report];
+      this.json.report = [ report ];
     }
   }
 
@@ -33,7 +35,7 @@ class LottieLint {
       layer.report = [];
       const path = prePath ? `${prePath}/layers[${index}]` : `#/layers[${index}]`;
       // 校验 部分lottie文件存在无用图层
-      if(layer.st >= this.json.op) {
+      if (layer.st >= this.json.op) {
         const report = {
           message: '当前图层进场时间大于动画结束时间，建议删除图层',
           rule: 'invalid_layer',
@@ -45,7 +47,7 @@ class LottieLint {
       }
 
       // Time Stretch
-      if(layer.sr !== 1) {
+      if (layer.sr !== 1) {
         const report = {
           message: '兼容性警告⚠️: 当前图层存在 Time Stretch 属性， 在 iOS 上不支持',
           rule: 'incompatible_time_stretch',
@@ -57,7 +59,7 @@ class LottieLint {
       }
 
       // Time Remap
-      if(layer.ty === layerMapping.LayerType.Precomp && layer.tm) {
+      if (layer.ty === layerMapping.LayerType.Precomp && layer.tm) {
         const report = {
           message: '兼容性警告⚠️: 当前图层存在 Time Remap 属性， 在 iOS 上不支持',
           rule: 'incompatible_time_remap',
@@ -69,7 +71,7 @@ class LottieLint {
       }
 
       // Text
-      if(layer.ty === layerMapping.LayerType.Text) {
+      if (layer.ty === layerMapping.LayerType.Text) {
         const report = {
           message: '兼容性警告⚠️: 当前图层为 Text，在 iOS 上完全不支持，在 Android 上只支持 Glyphs, Fonts, Transform, Fill, Stroke, Tracking',
           rule: 'incompatible_text',
@@ -105,31 +107,31 @@ class LottieLint {
       }
 
       // mask
-      if(layer.hasMask) {
+      if (layer.hasMask) {
         let report;
         layer.masksProperties.forEach((mask, j) => {
-          if(mask.mode === layerMapping.maskMode.Intersect) {
+          if (mask.mode === layerMapping.maskMode.Intersect) {
             report = {
               message: '兼容性警告⚠️: 当前图层的 Masks 模式为 Intersect，在 iOS 和 Android 上不支持',
               rule: 'incompatible_mask_mode',
               name: layer.nm,
               path: `${path}/mask[${j}]`,
             };
-          } else if(mask.mode === layerMapping.maskMode.Lighten) {
+          } else if (mask.mode === layerMapping.maskMode.Lighten) {
             report = {
               message: '兼容性警告⚠️: 当前图层的 Masks 模式为 Lighten，完全不支持',
               rule: 'incompatible_mask_mode',
               name: layer.nm,
               path: `${path}/mask[${j}]`,
             };
-          } else if(mask.mode === layerMapping.maskMode.Darken) {
+          } else if (mask.mode === layerMapping.maskMode.Darken) {
             report = {
               message: '兼容性警告⚠️: 当前图层的 Masks 模式为 Darken，完全不支持',
               rule: 'incompatible_mask_mode',
               name: layer.nm,
               path: `${path}/mask[${j}]`,
             };
-          } else if(mask.mode === layerMapping.maskMode.Difference) {
+          } else if (mask.mode === layerMapping.maskMode.Difference) {
             report = {
               message: '兼容性警告⚠️: 当前图层的 Masks 模式为 Difference，完全不支持',
               rule: 'incompatible_mask_mode',
@@ -139,11 +141,11 @@ class LottieLint {
           }
           layer.report.push(report);
           this.reports.push(report);
-        })
+        });
       }
 
       // Layer Effects
-      if(layer.ef) {
+      if (layer.ef) {
         const report = {
           message: '兼容性警告⚠️: 当前图层存在 Layer Effects，在 iOS 和 Android 上不支持',
           rule: 'incompatible_layer_effects',
@@ -154,7 +156,7 @@ class LottieLint {
         this.reports.push(report);
       }
 
-      if(layer.shapes) {
+      if (layer.shapes) {
         this.checkShapes(layer.shapes, `#/layers[${index}]`);
       }
     });
@@ -171,37 +173,37 @@ class LottieLint {
   checkShapes(shapes, prePath = '') {
     shapes.forEach((shape, i) => {
       shape.report = [];
-      if(shape.ty === 'gr') {
-        this.checkShapes(shape.it, `${prePath}/shape[${i}]`)
+      if (shape.ty === 'gr') {
+        this.checkShapes(shape.it, `${prePath}/shape[${i}]`);
       }
-      if(shape.ty === 'gs') {
+      if (shape.ty === 'gs') {
         const report = {
           message: '兼容性警告⚠️: 当前形状 Gradient Strokes，在 iOS 上不支持',
           rule: 'incompatible_gradient_strokes',
-          name: layer.nm,
+          name: shape.nm,
           path: `${prePath}/shape[${i}]`,
         };
         shape.report.push(report);
         this.reports.push(report);
       }
-      if(shape.type === 'mm') {
+      if (shape.type === 'mm') {
         const report = {
           message: '兼容性警告⚠️: Merge Paths 在 iOS 和 Web 上不支持',
           rule: 'incompatible_merge_paths',
-          name: layer.nm,
+          name: shape.nm,
           path: `${prePath}/shape[${i}]`,
         };
         shape.report.push(report);
         this.reports.push(report);
       }
-    })
+    });
   }
 
   getResult() {
     return {
       json: this.json,
       reports: this.reports,
-    }
+    };
   }
 }
 

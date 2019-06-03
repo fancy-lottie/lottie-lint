@@ -1,3 +1,6 @@
+'use strict';
+
+const semver = require('semver');
 
 module.exports = {
   version(json) {
@@ -27,5 +30,5 @@ module.exports = {
         return report;
       }
     });
-  }
-}
+  },
+};
