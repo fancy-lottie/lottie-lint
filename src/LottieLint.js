@@ -112,7 +112,7 @@ class LottieLint {
         layer.masksProperties.forEach((mask, j) => {
           if (mask.mode === layerMapping.maskMode.Intersect) {
             report = {
-              message: '兼容性警告⚠️: 当前图层的 Masks 模式为 Intersect，在 iOS 和 Android 上不支持',
+              message: '兼容性警告⚠️: 当前图层的 Masks 模式为 Intersect，在 Web 上不支持',
               rule: 'incompatible_mask_mode',
               name: layer.nm,
               path: `${path}/mask[${j}]`,
@@ -188,7 +188,7 @@ class LottieLint {
       }
       if (shape.type === 'mm') {
         const report = {
-          message: '兼容性警告⚠️: Merge Paths 在 iOS 和 Web 上不支持',
+          message: '兼容性警告⚠️: Merge Paths， 在 iOS 和 Web 上不支持',
           rule: 'incompatible_merge_paths',
           name: shape.nm,
           path: `${prePath}/shape[${i}]`,
