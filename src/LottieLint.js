@@ -173,6 +173,10 @@ class LottieLint {
         };
         layer.reports.push(report);
         this.reports.push(report);
+      }
+
+      if (layer.masksProperties && layer.masksProperties.length > 0) {
+        let report = null;
         layer.masksProperties.forEach((mask, j) => {
           element.mask = j;
           switch (mask.mode) {
@@ -222,8 +226,11 @@ class LottieLint {
             }
             default: break;
           }
-          layer.reports.push(report);
-          this.reports.push(report);
+
+          if (report) {
+            layer.reports.push(report);
+            this.reports.push(report);
+          }
         });
       }
 
