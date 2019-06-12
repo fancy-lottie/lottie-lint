@@ -2,18 +2,18 @@
 
 exports.layerMapping = {
   LayerType: {
-    Precomp: 0,
-    Solid: 1,
-    Image: 2,
-    Null: 3,
-    Shape: 4,
-    Text: 5,
-    Unknown: 6,
+    Precomp: 0, // 合成
+    Solid: 1, // 纯色 (默认包含蒙版)
+    Image: 2, // 图片
+    Null: 3, // 空
+    Shape: 4, // 形状
+    Text: 5, // 文本
+    Unknown: 6, // 空
   },
 
   MatteType: {
-    None: 0,
-    Add: 1,
+    None: 0, // 空
+    Add: 1, // 叠加
     Invert: 2,
     Unknown: 3,
   },
