@@ -1,4 +1,9 @@
 
+0.4.3 / 2019-06-13
+==================
+
+  * feat: lottie 5.5.* bodymovin export old json format lint (#6)
+
 0.4.2 / 2019-06-12
 ==================
 
