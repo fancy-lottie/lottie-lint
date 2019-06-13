@@ -14,6 +14,7 @@ class LottieLint {
 
   init() {
     this.checkVersion();
+    this.checkOldFormat();
     this.checkLayers(this.json.layers, { asset: -1 });
     this.checkAssets();
   }
@@ -29,6 +30,25 @@ class LottieLint {
 
       this.reports.push(report);
       this.json.reports = [ report ];
+    }
+  }
+
+  checkOldFormat() {
+    if (semver.gte(this.json.v, '5.5.0')) {
+      const jsonData = JSON.stringify(this.json);
+      const totalCount = (jsonData.match(/\"e\"/g) || []).length;
+      const assetCount = this.json.assets.filter(asset => !asset.layers).length;
+      if (totalCount === assetCount) {
+        const report = {
+          message: '使用了bodymovin 5.5.* 的版本导出 lottie json 文件, 但是没有勾选 Export old JSON format, 导致老版本(5.5.0以下)播放器无法播放',
+          rule: 'incompatible_old_json_format',
+          element: RootElement,
+          type: 'incompatible',
+          incompatible: [ 'iOS', 'Web', 'Android' ],
+        };
+        this.reports.push(report);
+        this.json.reports = [ report ];
+      }
     }
   }
 
