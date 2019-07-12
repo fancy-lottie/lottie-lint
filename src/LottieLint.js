@@ -40,7 +40,7 @@ class LottieLint {
       const assetCount = this.json.assets.filter(asset => !asset.layers).length;
       if (totalCount === assetCount) {
         const report = {
-          message: '使用了bodymovin 5.5.* 的版本导出 lottie json 文件, 但是没有勾选 Export old JSON format, 导致老版本(5.5.0以下)播放器无法播放',
+          message: '使用了插件版本5.5.*，播放器版本也必须是5.5.0+',
           rule: 'incompatible_old_json_format',
           element: RootElement,
           type: 'incompatible',
@@ -90,7 +90,7 @@ class LottieLint {
       // LayerType Solid
       if (layer.ty === layerMapping.LayerType.Solid) {
         report = {
-          message: '“纯色” 默认包含蒙版的能力，对性能有额外损耗，尽量改用“形状”来表达',
+          message: '“纯色” 隐含 “蒙版” 的能力，有额外性能损耗，尽量改用“形状”来表达',
           type: 'warn',
           rule: 'warn_layertype_solid',
           name: layer.nm,
@@ -106,20 +106,6 @@ class LottieLint {
           message: '“形状” 如果可以转化成 “图片” 运行，性能可以更好',
           type: 'info',
           rule: 'info_layertype_shape',
-          name: layer.nm,
-          element,
-        };
-        layer.reports.push(report);
-        this.reports.push(report);
-      }
-
-      // Time Stretch
-      if (layer.sr !== 1) {
-        report = {
-          message: '图层使用 “时间伸缩” 特性，在 iOS 上不支持',
-          type: 'incompatible',
-          incompatible: [ 'iOS' ],
-          rule: 'incompatible_time_stretch',
           name: layer.nm,
           element,
         };
@@ -283,7 +269,7 @@ class LottieLint {
   }
 
   checkAssets() {
-    const assets = this.json.assets;
+    const assets = this.json.assets || [];
     assets.forEach((asset, index) => {
       if (!utils.isPrecomp(asset)) return;
       this.checkLayers(asset.layers, { asset: index });
@@ -310,18 +296,6 @@ class LottieLint {
           type: 'incompatible',
           incompatible: [ 'iOS' ],
           rule: 'incompatible_gradient_strokes',
-          name: shape.nm,
-          element,
-        };
-        shape.reports.push(report);
-        this.reports.push(report);
-      }
-      if (shape.ty === 'mm') {
-        const report = {
-          message: '形状图层的 Merge Paths， 在 iOS 和 Web 上不支持',
-          type: 'incompatible',
-          incompatible: [ 'Web', 'iOS' ],
-          rule: 'incompatible_merge_paths',
           name: shape.nm,
           element,
         };
