@@ -9,10 +9,11 @@ describe('version linter', function() {
     const reports = linter(lottieData).reports;
     assert.deepStrictEqual(reports, [
       {
-        message: '使用了bodymovin 5.5.* 的版本导出 lottie json 文件, 但是没有勾选 Export old JSON format, 导致老版本(5.5.0以下)播放器无法播放',
-        rule: 'incompatible_old_json_format',
+        message: '使用插件版本5.5.0+，客户端必须也是5.5.0+，ios/android旧版播放器会闪退',
+        rule: 'warn_old_json_format',
         element: { asset: -1 },
-        type: 'incompatible',
+        type: 'warn',
+        name: '风险',
         incompatible: [ 'iOS', 'Web', 'Android' ],
       },
     ]);
