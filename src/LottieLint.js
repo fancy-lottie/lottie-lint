@@ -37,13 +37,15 @@ class LottieLint {
     if (semver.gte(this.json.v, '5.5.0')) {
       const jsonData = JSON.stringify(this.json);
       const totalCount = (jsonData.match(/\"e\"/g) || []).length;
+      const tmCount = (jsonData.match(/\"ty\"\:\"tm\"/g) || []).length; // tm 自带一个 e
       const assetCount = this.json.assets.filter(asset => !asset.layers).length;
-      if (totalCount === assetCount) {
+      if (totalCount + tmCount === assetCount) {
         const report = {
-          message: '使用了插件版本5.5.*，播放器版本也必须是5.5.0+',
-          rule: 'incompatible_old_json_format',
+          message: '使用插件版本5.5.0+，客户端必须也是5.5.0+，ios/android旧版播放器会闪退',
+          rule: 'warn_old_json_format',
           element: RootElement,
-          type: 'incompatible',
+          type: 'warn',
+          name: '风险',
           incompatible: [ 'iOS', 'Web', 'Android' ],
         };
         this.reports.push(report);
