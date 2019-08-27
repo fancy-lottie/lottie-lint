@@ -15,6 +15,7 @@ class LottieLint {
   init() {
     this.checkVersion();
     this.checkOldFormat();
+    this.checkFonts();
     this.checkLayers(this.json.layers, { asset: -1 });
     this.checkAssets();
   }
@@ -51,6 +52,21 @@ class LottieLint {
         this.reports.push(report);
         this.json.reports = [ report ];
       }
+    }
+  }
+
+  checkFonts() {
+    const fonts = this.json.fonts || {};
+    if (Array.isArray(fonts.list) && fonts.list.length > 0) {
+      const report = {
+        message: '包含字体数据, android 播放器会闪退',
+        rule: 'warn_fonts_json',
+        element: RootElement,
+        type: 'warn',
+        name: '风险',
+        incompatible: [ 'Android' ],
+      };
+      this.reports.push(report);
     }
   }
 
