@@ -34,13 +34,16 @@ class LottieLint {
     }
   }
 
+  // 5.5.0+的识别规则，解决老版本兼容性问题。
   checkOldFormat() {
     if (semver.gte(this.json.v, '5.5.0')) {
       const jsonData = JSON.stringify(this.json);
       const totalCount = (jsonData.match(/\"e\"/g) || []).length;
-      const tmCount = (jsonData.match(/\"ty\"\:\"tm\"/g) || []).length; // tm 自带一个 e
+      const tmCount = (jsonData.match(/\"ty\"\:\"tm\"/g) || []).length; // tm 自带一个 e 路径变换
+      const gsCount = (jsonData.match(/\"ty\"\:\"gs\"/g) || []).length; // gs 自带一个 e 渐变描边
+      const gfCount = (jsonData.match(/\"ty\"\:\"gs\"/g) || []).length; // gf 自带一个 e 渐变填充
       const assetCount = this.json.assets.filter(asset => !asset.layers).length;
-      if (totalCount + tmCount === assetCount) {
+      if (totalCount + tmCount + gsCount + gfCount === assetCount) {
         const report = {
           message: '使用插件版本5.5.0+，客户端必须也是5.5.0+，ios/android旧版播放器会闪退',
           rule: 'warn_old_json_format',
@@ -70,6 +73,7 @@ class LottieLint {
     }
   }
 
+  // 层的分解
   checkLayers(layers, parentElement) {
     layers.forEach((layer, index) => {
       layer.reports = [];
@@ -105,7 +109,7 @@ class LottieLint {
         this.reports.push(report);
       }
 
-      // LayerType Solid
+      // LayerType Solid 纯色
       if (layer.ty === layerMapping.LayerType.Solid) {
         report = {
           message: '“纯色” 隐含 “蒙版” 的能力，有额外性能损耗，尽量改用“形状”来表达',
@@ -118,7 +122,7 @@ class LottieLint {
         this.reports.push(report);
       }
 
-      // LayerType Shape
+      // LayerType Shape 矢量形状
       if (layer.ty === layerMapping.LayerType.Shape) {
         report = {
           message: '“形状” 如果可以转化成 “图片” 运行，性能可以更好',
@@ -131,7 +135,7 @@ class LottieLint {
         this.reports.push(report);
       }
 
-      // Time Remap
+      // Time Remap 时间映射
       if (layer.ty === layerMapping.LayerType.Precomp && layer.tm) {
         report = {
           message: '图层使用 “时间重映射” 特性，在 iOS 上不支持',
@@ -172,7 +176,7 @@ class LottieLint {
         this.reports.push(report);
       }
 
-      // Auto Orient
+      // Auto Orient 自动定向
       if (layer.ao) {
         report = {
           message: '图层存在 “自动定向” 特性，在 Web 和 Android 上不支持',
@@ -186,7 +190,7 @@ class LottieLint {
         this.reports.push(report);
       }
 
-      // mask
+      // mask 蒙版
       if (layer.hasMask) {
         report = {
           message: '图层的存在 “蒙版”，对运行性能有一定影响，请审视必要性',
@@ -199,6 +203,7 @@ class LottieLint {
         this.reports.push(report);
       }
 
+      // 蒙版的各种模式校验
       if (layer.masksProperties && layer.masksProperties.length > 0) {
         let report = null;
         layer.masksProperties.forEach((mask, j) => {
@@ -258,7 +263,7 @@ class LottieLint {
         });
       }
 
-      // Layer Effects
+      // Layer Effects 滤镜
       if (layer.ef) {
         report = {
           message: '图层存在 “效果” 滤镜，在 iOS 和 Android 上不支持',
@@ -294,6 +299,12 @@ class LottieLint {
     });
   }
 
+  /**
+   * 对形状类型的遍历
+   * @param {*} shapes 形状对象
+   * @param {*} parentElement 父节点
+   * @param {*} isGroup 是否是“编组”
+   */
   checkShapes(shapes, parentElement, isGroup) {
     shapes.forEach((shape, i) => {
       shape.reports = [];
@@ -305,8 +316,23 @@ class LottieLint {
         ...parentElement,
         shape: i,
       };
+      // 对编组做“递归”处理
       if (shape.ty === 'gr') {
         this.checkShapes(shape.it, element, true);
+      }
+      // 检测出“渐变效果”是否异常，如果出现"纯白-纯黑"渐变，引导设计师操作
+      if (shape.ty === 'gf' || shape.ty === 'gs') {
+        if (shape.g && shape.g.k.k && shape.g.k && shape.g.k.k && shape.g.k.k.toString() === '0,1,1,1,1,0,0,0') {
+          const report = {
+            message: '渐变的绘制存在乱码异常',
+            type: 'warn',
+            rule: 'warn_gradient_error',
+            name: shape.nm,
+            element,
+          };
+          shape.reports.push(report);
+          this.reports.push(report);
+        }
       }
       if (shape.ty === 'gs') {
         const report = {
