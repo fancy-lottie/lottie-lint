@@ -326,7 +326,7 @@ class LottieLint {
           const report = {
             message: '渐变的绘制存在乱码异常',
             type: 'warn',
-            rule: 'warn_gradient_error',
+            rule: 'warn_gradient_warn',
             name: shape.nm,
             element,
           };
