@@ -1,4 +1,4 @@
-### lottie lint
+## lottie lint ![travis ci](https://travis-ci.com/Lottie-Lint/lottie-lint.svg?branch=master)
 
 ### use
 
