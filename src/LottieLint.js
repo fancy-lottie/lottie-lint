@@ -77,7 +77,6 @@ class LottieLint {
   checkLayers(layers, parentElement) {
     layers.forEach((layer, index) => {
       layer.reports = [];
-      let report;
       const element = {
         ...parentElement,
         layer: index,
@@ -85,7 +84,7 @@ class LottieLint {
 
       // 校验 部分lottie文件存在无用图层
       if (layer.st >= this.json.op) {
-        report = {
+        const report = {
           message: '无效图层，进场时间大于动画结束时间，建议删除图层',
           type: 'error',
           rule: 'error_invalid_layer',
@@ -98,7 +97,7 @@ class LottieLint {
 
       // 校验 部分lottie文件存在无用图层
       if (layer.op < 0 && layer.op < this.json.ip) {
-        report = {
+        const report = {
           message: '无效图层，出场的时间小于动画开始时间，建议删除图层',
           type: 'error',
           rule: 'error_invalid_layer',
@@ -111,7 +110,7 @@ class LottieLint {
 
       // LayerType Solid 纯色
       if (layer.ty === layerMapping.LayerType.Solid) {
-        report = {
+        const report = {
           message: '“纯色” 隐含 “蒙版” 的能力，有额外性能损耗，尽量改用“形状”来表达',
           type: 'warn',
           rule: 'warn_layertype_solid',
@@ -124,7 +123,7 @@ class LottieLint {
 
       // LayerType Shape 矢量形状
       if (layer.ty === layerMapping.LayerType.Shape) {
-        report = {
+        const report = {
           message: '“形状” 如果可以转化成 “图片” 运行，性能可以更好',
           type: 'info',
           rule: 'info_layertype_shape',
@@ -137,7 +136,7 @@ class LottieLint {
 
       // Time Remap 时间映射
       if (layer.ty === layerMapping.LayerType.Precomp && layer.tm) {
-        report = {
+        const report = {
           message: '图层使用 “时间重映射” 特性，在 iOS 上不支持',
           type: 'incompatible',
           incompatible: [ 'iOS' ],
@@ -165,7 +164,7 @@ class LottieLint {
 
       // 存在遮罩层 应该进行提示
       if (utils.hasMatte(layer)) {
-        report = {
+        const report = {
           message: '图层存在 “遮罩层” 特性，极其损耗性能，建议不使用，或用 “蒙版” 替代',
           type: 'warn',
           rule: 'warn_matte_not_suggested',
@@ -178,7 +177,7 @@ class LottieLint {
 
       // Auto Orient 自动定向
       if (layer.ao) {
-        report = {
+        const report = {
           message: '图层存在 “自动定向” 特性，在 Web 和 Android 上不支持',
           type: 'incompatible',
           incompatible: [ 'Web', 'Android' ],
@@ -192,7 +191,7 @@ class LottieLint {
 
       // mask 蒙版
       if (layer.hasMask) {
-        report = {
+        const report = {
           message: '图层的存在 “蒙版”，对运行性能有一定影响，请审视必要性',
           type: 'info',
           rule: 'info_mask_mode',
@@ -205,9 +204,10 @@ class LottieLint {
 
       // 蒙版的各种模式校验
       if (layer.masksProperties && layer.masksProperties.length > 0) {
-        let report = null;
         layer.masksProperties.forEach((mask, j) => {
           element.mask = j;
+
+          let report = null;
           switch (mask.mode) {
             case layerMapping.maskMode.Intersect: {
               report = {
@@ -265,19 +265,11 @@ class LottieLint {
 
       // Layer Effects 滤镜
       if (layer.ef) {
-        report = {
-          message: '图层存在 “效果” 滤镜，在 iOS 和 Android 上不支持',
+        const report = {
+          message: '图层存在 “效果” 滤镜，影响渲染性能；在 iOS 和 Android 上不支持',
           type: 'incompatible',
           incompatible: [ 'Android', 'iOS' ],
           rule: 'incompatible_layer_effects',
-          name: layer.nm,
-          element,
-        };
-        layer.reports.push(report);
-        report = {
-          message: '图层存在 “效果” 滤镜，影响渲染性能',
-          type: 'info',
-          rule: 'info_layer_effects',
           name: layer.nm,
           element,
         };

@@ -7,3 +7,4 @@ module.exports = function(jsonData) {
   return lottieLint.getResult();
 };
 
+module.exports.LottieLint = LottieLint;

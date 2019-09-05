@@ -119,9 +119,13 @@ describe('linter', function() {
         },
       },
       {
-        message: '图层存在 “效果” 滤镜，影响渲染性能',
-        type: 'info',
-        rule: 'info_layer_effects',
+        message: '图层存在 “效果” 滤镜，影响渲染性能；在 iOS 和 Android 上不支持',
+        incompatible: [
+          'Android',
+          'iOS',
+        ],
+        type: 'incompatible',
+        rule: 'incompatible_layer_effects',
         name: 'shadow',
         element: {
           asset: -1,

@@ -16,7 +16,8 @@
     "performance"
   ],
   "files": [
-    "lib"
+    "lib",
+    "index.d.ts"
   ],
   "author": "lottie lint team",
   "license": "MIT",
