@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rm -fr ./lib && babel src -d lib",
     "lint": "eslint src test",
-    "test": "mocha --require intelli-espower-loader --check-leaks -t 5000 test/*.test.js",
+    "test": "mocha --require intelli-espower-loader --require @babel/register --check-leaks -t 5000 test/*.test.js",
     "test-cov": "nyc --reporter=clover --reporter=text-summary npm run test",
     "test-travis": "npm run test-cov"
   },
@@ -19,15 +19,19 @@
     "lib",
     "index.d.ts"
   ],
+  "babel": {
+    "presets": ["@babel/preset-env"]
+  },
   "author": "lottie lint team",
   "license": "MIT",
   "dependencies": {
     "semver": "^5.6.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.1.5",
-    "@babel/core": "^7.1.6",
-    "@babel/preset-env": "^7.1.6",
+    "@babel/cli": "^7.6.0",
+    "@babel/core": "^7.6.0",
+    "@babel/preset-env": "^7.6.0",
+    "@babel/register": "^7.6.0",
     "eslint": "^5.15.3",
     "eslint-config-egg": "^7.2.0",
     "intelli-espower-loader": "^1.0.1",

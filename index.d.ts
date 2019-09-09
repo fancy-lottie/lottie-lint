@@ -23,7 +23,7 @@ declare module 'lottie-lint' {
     reports: report[],
   }
 
-  class LottieLint {
+  export class LottieLint {
     private json: any;
     private reports: report[];
 
