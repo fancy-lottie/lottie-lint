@@ -1,7 +1,6 @@
-'use strict';
 const assert = require('assert');
 
-const linter = require('../src/index');
+import linter from '../src';
 
 describe('version linter', function() {
   it('未导出兼容版本', () => {

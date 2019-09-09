@@ -1,3 +1,6 @@
 module.exports = {
-  extends: 'eslint-config-egg'
+  extends: 'eslint-config-egg',
+  parserOptions: {
+    sourceType: 'module',
+  },
 };

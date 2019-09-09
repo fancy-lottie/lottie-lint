@@ -1,7 +1,7 @@
-'use strict';
+
 const assert = require('assert');
 
-const linter = require('../src/index');
+import linter from '../src';
 
 describe('fonts linter', function() {
   it('无字体', () => {

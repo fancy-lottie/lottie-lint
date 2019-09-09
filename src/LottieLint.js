@@ -1,11 +1,11 @@
-'use strict';
 
-const semver = require('semver');
-const utils = require('./utils');
-const { layerMapping } = require('./c');
+import semver from 'semver';
+import utils from './utils';
+
+const { layerMapping } = utils;
 const RootElement = { asset: -1 };
 
-class LottieLint {
+export default class LottieLint {
   constructor(jsonData) {
     this.json = JSON.parse(JSON.stringify(jsonData));
     this.reports = [];
@@ -348,5 +348,3 @@ class LottieLint {
     };
   }
 }
-
-module.exports = LottieLint;

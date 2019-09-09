@@ -1,10 +1,10 @@
-'use strict';
 
-const LottieLint = require('./LottieLint');
+import LottieLint from './LottieLint';
 
-module.exports = function(jsonData) {
+function lottieLint(jsonData) {
   const lottieLint = new LottieLint(jsonData);
   return lottieLint.getResult();
-};
+}
 
-module.exports.LottieLint = LottieLint;
+lottieLint.LottieLint = LottieLint;
+export default lottieLint;
