@@ -1,7 +1,7 @@
 {
   "name": "lottie-lint",
-  "version": "0.8.0",
-  "description": "lottie lint",
+  "version": "1.0.0",
+  "description": "lottie json lint",
   "main": "lib/index.js",
   "scripts": {
     "build": "rm -fr ./lib && babel src -d lib",
