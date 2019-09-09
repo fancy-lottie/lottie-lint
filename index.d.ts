@@ -1,5 +1,21 @@
 declare module 'lottie-lint' {
-  interface element {}
+  // 坐标系可以表达任意位置的element
+  interface element {
+    // -1～∞，其中-1代表lottie，0～∞代表lottie.assets[asset]
+    asset: number;
+    // 非必填属性 undefined || 0～∞，代表asset.layers[layer]
+    layer?: number;
+    // 非必填属性 undefined || 0～∞，代表layer.shapes[shape]
+    shape?: number;
+    // 非必填属性 undefined || 0～∞，代表shape.gr.it[groupIt]
+    groupIt?: number;
+    // 非必填属性 undefined || 0～∞，代layer.masksProperties[mask]
+    mask?: number;
+    // 非必填属性 undefined || 类型，用于辅助快速定位，在结构化以后会帮忙导出
+    type?: string;
+    // 非必填属性 undefined || 类型，type的辅助属性
+    ty?: string;
+  }
 
   interface report {
     // 提示的文本内容
