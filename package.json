@@ -1,6 +1,6 @@
 {
   "name": "lottie-lint",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "lottie json lint",
   "main": "lib/index.js",
   "scripts": {
