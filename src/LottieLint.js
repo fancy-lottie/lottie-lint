@@ -41,7 +41,7 @@ export default class LottieLint {
       const totalCount = (jsonData.match(/\"e\"/g) || []).length;
       const tmCount = (jsonData.match(/\"ty\"\:\"tm\"/g) || []).length; // tm 自带一个 e 路径变换
       const gsCount = (jsonData.match(/\"ty\"\:\"gs\"/g) || []).length; // gs 自带一个 e 渐变描边
-      const gfCount = (jsonData.match(/\"ty\"\:\"gs\"/g) || []).length; // gf 自带一个 e 渐变填充
+      const gfCount = (jsonData.match(/\"ty\"\:\"gf\"/g) || []).length; // gf 自带一个 e 渐变填充
       const assetCount = this.json.assets.filter(asset => !asset.layers).length;
       if (totalCount + tmCount + gsCount + gfCount === assetCount) {
         const report = {
