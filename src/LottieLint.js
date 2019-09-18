@@ -42,8 +42,9 @@ export default class LottieLint {
       const tmCount = (jsonData.match(/\"ty\"\:\"tm\"/g) || []).length; // tm 自带一个 e 路径变换
       const gsCount = (jsonData.match(/\"ty\"\:\"gs\"/g) || []).length; // gs 自带一个 e 渐变描边
       const gfCount = (jsonData.match(/\"ty\"\:\"gf\"/g) || []).length; // gf 自带一个 e 渐变填充
-      const assetCount = this.json.assets.filter(asset => !asset.layers).length;
-      if (totalCount + tmCount + gsCount + gfCount === assetCount) {
+      const assetCount = this.json.assets.filter(asset => !asset.layers).length; // 资产 每个层自带一个 e
+      const diffCount = assetCount + tmCount + gsCount + gfCount; // 汇总所有 e 的 case
+      if (totalCount === diffCount) {
         const report = {
           message: '使用插件版本5.5.0+，客户端必须也是5.5.0+，ios/android旧版播放器会闪退',
           rule: 'warn_old_json_format',

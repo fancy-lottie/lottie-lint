@@ -22,6 +22,14 @@ describe('version linter', function() {
     const reports = linter(lottieData).reports;
     assert.deepStrictEqual(reports, [
       {
+        message: '使用插件版本5.5.0+，客户端必须也是5.5.0+，ios/android旧版播放器会闪退',
+        rule: 'warn_old_json_format',
+        element: { asset: -1 },
+        type: 'warn',
+        name: '风险',
+        incompatible: [ 'iOS', 'Web', 'Android' ],
+      },
+      {
         message: '“形状” 如果可以转化成 “图片” 运行，性能可以更好',
         type: 'info',
         rule: 'info_layertype_shape',
