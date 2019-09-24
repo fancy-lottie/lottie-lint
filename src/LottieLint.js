@@ -76,6 +76,14 @@ export default class LottieLint {
 
   // 层的分解
   checkLayers(layers, parentElement) {
+
+    // 对assets里面对对象的ip op 进行校正
+    const parentNode = utils.getNode(this.json, parentElement);
+    if (parentNode.op === undefined) {
+      parentNode.ip = 0;
+      parentNode.op = utils.getAssetItemOp(this.json, parentNode.id);
+    }
+
     layers.forEach((layer, index) => {
       layer.reports = [];
       const element = {
@@ -84,7 +92,7 @@ export default class LottieLint {
       };
 
       // 校验 部分lottie文件存在无用图层
-      if (layer.st >= this.json.op) {
+      if (layer.ip > parentNode.op) {
         const report = {
           message: '无效图层，进场时间大于动画结束时间，建议删除图层',
           type: 'error',
@@ -97,7 +105,7 @@ export default class LottieLint {
       }
 
       // 校验 部分lottie文件存在无用图层
-      if (layer.op < 0 && layer.op < this.json.ip) {
+      if (layer.op < 0 || layer.op < parentNode.ip) {
         const report = {
           message: '无效图层，出场的时间小于动画开始时间，建议删除图层',
           type: 'error',
