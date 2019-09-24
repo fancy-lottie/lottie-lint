@@ -1,4 +1,3 @@
-import { isNumber } from "util";
 
 const isImage = asset => {
   if (!asset) throw new Error('invel asset');
@@ -88,7 +87,7 @@ const getNode = (lottieFile, Element) => {
   let node = lottieFile;
   function deepGet(oldNode, ele, type) {
     let element = oldNode;
-    if (isNumber(ele[type])) {
+    if (ele[type] !== undefined) {
       if (ele[type] !== -1) {
         switch (type) {
           case 'mask':
