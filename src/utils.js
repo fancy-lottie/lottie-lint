@@ -54,20 +54,20 @@ const layerMapping = {
 // 获取assetsItem的帧结束时间, 注: 帧的结束时间取自层的(op-st)/sr;
 const getAssetItemOp = (lottieFile, id) => {
   let op = 0;
+  // 主layers遍历
   lottieFile.layers.forEach(item => {
     if (item.refId === id) {
       op = (item.op - item.st) / item.sr;
     }
   });
   if (!op) {
+    // assets的layers遍历
     lottieFile.assets.forEach(asset => {
-      if (asset.layers) {
-        asset.layers.forEach(item => {
-          if (item.refId === id) {
-            op = (item.op - item.st) / item.sr;
-          }
-        });
-      }
+      asset.layers && asset.layers.forEach(item => {
+        if (item.refId === id) {
+          op = (item.op - item.st) / item.sr;
+        }
+      });
     });
   }
   return op;
@@ -85,21 +85,20 @@ const getAssetItemOp = (lottieFile, id) => {
 // }
 const getNode = (lottieFile, Element) => {
   let node = lottieFile;
-  function deepGet(oldNode, ele, type) {
-    let element = oldNode;
-    if (ele[type] !== undefined) {
-      if (ele[type] !== -1) {
-        switch (type) {
-          case 'mask':
-            element = oldNode.masksProperties[ele[type]];
-            break;
-          case 'groupIt':
-            element = oldNode.gr.it[ele[type]];
-            break;
-          default:
-            element = oldNode[`${type}s`][ele[type]];
-            break;
-        }
+  function deepGet(preNode, ele, type) {
+    let element = preNode;
+    const eleType = ele[type];
+    if (eleType !== undefined && eleType !== -1) {
+      switch (type) {
+        case 'mask':
+          element = preNode.masksProperties[eleType];
+          break;
+        case 'groupIt':
+          element = preNode.gr.it[eleType];
+          break;
+        default:
+          element = preNode[`${type}s`][eleType];
+          break;
       }
     }
     return element;
