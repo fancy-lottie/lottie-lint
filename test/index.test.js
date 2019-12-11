@@ -21,7 +21,7 @@ describe('linter', function() {
       },
       {
         message: '图层存在 “遮罩层” 特性，极其损耗性能，建议不使用，或用 “蒙版” 替代',
-        type: 'warn',
+        type: 'error',
         rule: 'warn_matte_not_suggested',
         name: '发射条.png',
         element: {
