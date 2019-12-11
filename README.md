@@ -52,6 +52,26 @@ interface report {
 
 附: 坐标系的表达: https://www.yuque.com/lottie/xdrbsp/zg967e
 
+### rules
+
+| 规则名 | 属性 | 说明 |
+| ---- | ---- | ---- |
+| incompatible_gradient_strokes | 渐变描边兼容性 |  |
+| warn_gradient_warn | 异常渐变 |  |
+| incompatible_layer_effects | 效果滤镜 |  |
+| incompatible_mask_mode | 蒙版的兼容性 |  |
+| info_mask_mode | 蒙版 |  |
+| incompatible_auto_orient | 自动定向 |  |
+| warn_matte_not_suggested | 遮罩层 |  |
+| incompatible_time_remap | 时间重映射 |  |
+| info_layertype_shape | 形状的性能优化 |  |
+| warn_fonts_json | 字体兼容性 |  |
+| warn_old_json_format | 插件版本5.5.0+兼容性 |  |
+| warn_layertype_solid | 纯色模块 |  |
+| error_invalid_layer | 无效图层 |  |
+
+附：规则详细说明 https://www.yuque.com/lottie/lint
+
 ### TODO
 
 - [ ] 更好的lint位置提示 
