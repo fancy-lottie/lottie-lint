@@ -26,6 +26,7 @@ export default class LottieLint {
         message: 'Lottie only supports bodymovin >= 4.4.0',
         rule: 'version',
         element: RootElement,
+        type: 'warn',
         parentElement: RootElement,
       };
 
@@ -59,6 +60,7 @@ export default class LottieLint {
     }
   }
 
+  // 字体检测
   checkFonts() {
     const fonts = this.json.fonts || {};
     if (Array.isArray(fonts.list) && fonts.list.length > 0) {
@@ -92,7 +94,7 @@ export default class LottieLint {
       };
 
       // 校验 部分lottie文件存在无用图层
-      if (layer.ip > parentNode.op) {
+      if (layer.ip >= parentNode.op) {
         const report = {
           message: '无效图层，进场时间大于动画结束时间，建议删除图层',
           type: 'error',
@@ -286,6 +288,7 @@ export default class LottieLint {
         this.reports.push(report);
       }
 
+      // 对形状图层进行递归式遍历
       if (layer.shapes) {
         this.checkShapes(layer.shapes, element);
       }
@@ -337,7 +340,7 @@ export default class LottieLint {
       }
       if (shape.ty === 'gs') {
         const report = {
-          message: '形状图层的 Gradient Strokes，在 iOS 上不支持',
+          message: '形状图层的渐变描边，在 iOS 上不支持',
           type: 'incompatible',
           incompatible: [ 'iOS' ],
           rule: 'incompatible_gradient_strokes',
@@ -346,6 +349,20 @@ export default class LottieLint {
         };
         shape.reports.push(report);
         this.reports.push(report);
+      }
+      if (shape.ty === 'rd') {
+        if (shape.r && shape.r.k !== 0) {
+          const report = {
+            message: '矩形的圆角设置，在 iOS、Android 上不支持，导致部分机型绘制错误',
+            type: 'incompatible',
+            incompatible: [ 'iOS', 'Android' ],
+            rule: 'incompatible_rounded_corners',
+            name: shape.nm,
+            element,
+          };
+          shape.reports.push(report);
+          this.reports.push(report);
+        }
       }
     });
   }

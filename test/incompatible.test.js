@@ -64,7 +64,7 @@ describe('version linter', function() {
         },
       },
       {
-        message: '形状图层的 Gradient Strokes，在 iOS 上不支持',
+        message: '形状图层的渐变描边，在 iOS 上不支持',
         type: 'incompatible',
         incompatible: [
           'iOS',
