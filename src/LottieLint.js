@@ -255,9 +255,9 @@ export default class LottieLint {
             }
             case layerMapping.maskMode.Difference: {
               report = {
-                message: '图层蒙版中存在 “差值” 的混合模式，目前所有终端都不支持',
+                message: '图层蒙版中存在 “差值” 的混合模式，在 Web、iOS 上不支持',
                 type: 'incompatible',
-                incompatible: [ 'Web', 'Android', 'iOS' ],
+                incompatible: [ 'Web', 'iOS' ],
                 rule: 'incompatible_mask_mode',
                 name: layer.nm,
                 element,
