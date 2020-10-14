@@ -12,13 +12,25 @@ const linter = require('lottie-lint');
 const { json, reports } = linter.default(lottie json);
 ```
 
-### lint 规则
+### lint rules
 
-1. 兼容性：详情参考 [lottie Supported Features](https://www.yuque.com/lottie/document/supported-features)
-2. 无效图层：当前图层进场时间大于动画结束时间，建议删除图层
-3. 不建议使用遮罩层（`Mattes`）：当前图层存在遮罩层，建议使用蒙版替代
-4. ae 插件版本识别；5.5.0+ 的判断建议
-5. 字体数据检测
+| 规则名 | 属性 | 等级 | 说明 |
+| ---- | ---- | ---- | ---- |
+| info_mask_mode | 蒙版 | info | |
+| info_layertype_shape | 形状的性能优化 | info | |
+| incompatible_gradient_strokes | 渐变描边兼容性 | incompatible | [lottie Supported Features](https://www.yuque.com/lottie/document/supported-features) |
+| incompatible_layer_effects | 效果滤镜 | incompatible | [lottie Supported Features](https://www.yuque.com/lottie/document/supported-features) |
+| incompatible_mask_mode | 蒙版的兼容性 | incompatible | [lottie Supported Features](https://www.yuque.com/lottie/document/supported-features) |
+| incompatible_auto_orient | 自动定向 | incompatible | [lottie Supported Features](https://www.yuque.com/lottie/document/supported-features) |
+| incompatible_time_remap | 时间重映射 | incompatible | [lottie Supported Features](https://www.yuque.com/lottie/document/supported-features) |
+| warn_gradient_warn | 异常渐变 | warn | |
+| warn_fonts_json | 字体兼容性 | warn | 字体数据检测 |
+| warn_old_json_format | 插件版本5.5.0+兼容性 | warn | ae 插件版本识别；5.5.0+ 的判断建议 |
+| warn_layertype_solid | 纯色模块 | warn | |
+| warn_matte_not_suggested | 遮罩层 | error | 当前图层存在遮罩层，建议使用蒙版替代 |
+| error_invalid_layer | 无效图层 | error | 当前图层进场时间大于动画结束时间，建议删除图层 |
+
+附：规则详细说明 https://www.yuque.com/lottie/lint
 
 ### 等级
 

@@ -1,6 +1,6 @@
 {
   "name": "lottie-lint",
-  "version": "1.0.2",
+  "version": "1.1.1",
   "description": "lottie json lint",
   "main": "lib/index.js",
   "scripts": {
@@ -20,7 +20,9 @@
     "index.d.ts"
   ],
   "babel": {
-    "presets": ["@babel/preset-env"]
+    "presets": [
+      "@babel/preset-env"
+    ]
   },
   "author": "lottie lint team",
   "license": "MIT",

@@ -1,4 +1,16 @@
 
+1.1.1 / 2019-12-11
+==================
+
+**others**
+  * [[`386ff79`](http://github.com/Lottie-Lint/lottie-lint/commit/386ff79457baca9ebf5d8cc818d43fc85795d045)] - chore: 将遮罩错误等级调整成 error (#19) (Ink <<chceyes@gmail.com>>)
+  * [[`14ba6da`](http://github.com/Lottie-Lint/lottie-lint/commit/14ba6dab6168523f01012613140d8fba29e1df13)] - chore: README.md 添加规则列表 (#18) (Ink <<chceyes@gmail.com>>)
+
+1.1.0 / 2019-09-24
+==================
+
+  * feat: 精准的ip/op的超领域判断 (#17)
+
 1.0.2 / 2019-09-18
 ==================
 
