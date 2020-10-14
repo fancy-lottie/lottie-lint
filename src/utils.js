@@ -50,7 +50,6 @@ const layerMapping = {
   },
 };
 
-
 // 获取assetsItem的帧结束时间, 注: 帧的结束时间取自层的(op-st)/sr;
 const getAssetItemOp = (lottieFile, id) => {
   let op = 0;
@@ -73,16 +72,20 @@ const getAssetItemOp = (lottieFile, id) => {
   return op;
 };
 
-// 获取对象节点: 未完成版本
-// interface Element { // 坐标系可以表达任意位置的element
-//   asset: Number; // -1～∞，其中-1代表lottie，0～∞代表lottie.assets[asset]
-//   layer: Number; // 非必填属性 undefined || 0～∞，代表asset.layers[layer]
-//   shape: Number; // 非必填属性 undefined || 0～∞，代表layer.shapes[shape]
-//   groupIt: Number; // 非必填属性 undefined || 0～∞，代表shape.gr.it[groupIt]
-//   mask: Number; // 非必填属性 undefined || 0～∞，代layer.masksProperties[mask]
-//   type: String; // 非必填属性 undefined || 类型，用于辅助快速定位，在结构化以后会帮忙导出
-//   ty: String; // 非必填属性 undefined || 类型，type的辅助属性
-// }
+/**
+ * 获取对象节点: 未完成版本
+ * @param {object} lottieFile lottie文件
+ * @param {object} Element
+ * interface Element {  // 坐标系可以表达任意位置的element
+ *   asset: Number;  // -1～∞，其中-1代表lottie，0～∞代表lottie.assets[asset]
+ *   layer: Number;  // 非必填属性 undefined || 0～∞，代表asset.layers[layer]
+ *   shape: Number;  // 非必填属性 undefined || 0～∞，代表layer.shapes[shape]
+ *   groupIt: Number;  // 非必填属性 undefined || 0～∞，代表shape.gr.it[groupIt]
+ *   mask: Number;  // 非必填属性 undefined || 0～∞，代layer.masksProperties[mask]
+ *   type: String;  // 非必填属性 undefined || 类型，用于辅助快速定位，在结构化以后会帮忙导出
+ *   ty: String;  // 非必填属性 undefined || 类型，type的辅助属性
+ * }
+ **/
 const getNode = (lottieFile, Element) => {
   let node = lottieFile;
   function deepGet(preNode, ele, type) {
@@ -111,6 +114,29 @@ const getNode = (lottieFile, Element) => {
   return node;
 };
 
+// 静态图层总数统计 (静态图层是指名义上的layers总数，性能相关的运行状态另外计算)
+const layersCount = lottieFile => {
+  let count = 0;
+  lottieFile.layers.forEach(() => {
+    count += 1;
+  });
+  lottieFile.assets.forEach(asset => {
+    if (asset.layers) {
+      asset.layers.forEach(() => {
+        count += 1;
+      });
+    }
+  });
+  return count;
+};
+
+// TODO: 统计绘制面积
+const areaStatistics = lottieFile => {
+  lottieFile.layers.forEach(item => {
+    return item;
+  });
+};
+
 export default {
   getAssetItemOp,
   getNode,
@@ -118,4 +144,6 @@ export default {
   isPrecomp,
   hasMatte,
   layerMapping,
+  layersCount, // 图层统计
+  areaStatistics, // 绘制面积统计
 };

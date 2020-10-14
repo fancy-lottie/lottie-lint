@@ -15,6 +15,7 @@ export default class LottieLint {
   init() {
     this.checkVersion();
     this.checkOldFormat();
+    this.checkAttrIndIsUndefined();
     this.checkFonts();
     this.checkLayers(this.json.layers, { asset: -1 });
     this.checkAssets();
@@ -26,6 +27,7 @@ export default class LottieLint {
         message: 'Lottie only supports bodymovin >= 4.4.0',
         rule: 'version',
         element: RootElement,
+        type: 'warn',
         parentElement: RootElement,
       };
 
@@ -59,6 +61,38 @@ export default class LottieLint {
     }
   }
 
+  // 校验导出的对象是否缺失ind属性，该属性ios播放终端强依赖
+  checkAttrIndIsUndefined() {
+    let isUndefined = false;
+    this.json.layers.forEach(layer => {
+      if (layer.ind === undefined) {
+        isUndefined = true;
+      }
+    });
+    this.json.assets.forEach(asset => {
+      if (asset.layers) {
+        asset.layers.forEach(layer => {
+          if (layer.ind === undefined) {
+            isUndefined = true;
+          }
+        });
+      }
+    });
+    if (isUndefined) {
+      const report = {
+        message: '插件导出的lottie缺乏ind属性，会导致ios播放器会出现闪退',
+        rule: 'error_attr_ind_isUndefined',
+        element: RootElement,
+        type: 'error',
+        name: '风险',
+        incompatible: [ 'iOS' ],
+      };
+      this.reports.push(report);
+      this.json.reports = [ report ];
+    }
+  }
+
+  // 字体检测
   checkFonts() {
     const fonts = this.json.fonts || {};
     if (Array.isArray(fonts.list) && fonts.list.length > 0) {
@@ -92,7 +126,7 @@ export default class LottieLint {
       };
 
       // 校验 部分lottie文件存在无用图层
-      if (layer.ip > parentNode.op) {
+      if (layer.ip >= parentNode.op) {
         const report = {
           message: '无效图层，进场时间大于动画结束时间，建议删除图层',
           type: 'error',
@@ -253,9 +287,9 @@ export default class LottieLint {
             }
             case layerMapping.maskMode.Difference: {
               report = {
-                message: '图层蒙版中存在 “差值” 的混合模式，目前所有终端都不支持',
+                message: '图层蒙版中存在 “差值” 的混合模式，在 Web、iOS 上不支持',
                 type: 'incompatible',
-                incompatible: [ 'Web', 'Android', 'iOS' ],
+                incompatible: [ 'Web', 'iOS' ],
                 rule: 'incompatible_mask_mode',
                 name: layer.nm,
                 element,
@@ -286,6 +320,7 @@ export default class LottieLint {
         this.reports.push(report);
       }
 
+      // 对形状图层进行递归式遍历
       if (layer.shapes) {
         this.checkShapes(layer.shapes, element);
       }
@@ -337,7 +372,7 @@ export default class LottieLint {
       }
       if (shape.ty === 'gs') {
         const report = {
-          message: '形状图层的 Gradient Strokes，在 iOS 上不支持',
+          message: '形状图层的渐变描边，在 iOS 上不支持',
           type: 'incompatible',
           incompatible: [ 'iOS' ],
           rule: 'incompatible_gradient_strokes',
@@ -346,6 +381,20 @@ export default class LottieLint {
         };
         shape.reports.push(report);
         this.reports.push(report);
+      }
+      if (shape.ty === 'rd') {
+        if (shape.r && shape.r.k !== 0) {
+          const report = {
+            message: '矩形的圆角设置，在 iOS、Android 上不支持，导致部分机型绘制错误',
+            type: 'incompatible',
+            incompatible: [ 'iOS', 'Android' ],
+            rule: 'incompatible_rounded_corners',
+            name: shape.nm,
+            element,
+          };
+          shape.reports.push(report);
+          this.reports.push(report);
+        }
       }
     });
   }
