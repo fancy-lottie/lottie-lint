@@ -15,6 +15,7 @@ export default class LottieLint {
   init() {
     this.checkVersion();
     this.checkOldFormat();
+    this.checkAttrIndIsUndefined();
     this.checkFonts();
     this.checkLayers(this.json.layers, { asset: -1 });
     this.checkAssets();
@@ -57,6 +58,37 @@ export default class LottieLint {
         this.reports.push(report);
         this.json.reports = [ report ];
       }
+    }
+  }
+
+  // 校验导出的对象是否缺失ind属性，该属性ios播放终端强依赖
+  checkAttrIndIsUndefined() {
+    let isUndefined = false;
+    this.json.layers.forEach(layer => {
+      if (layer.ind === undefined) {
+        isUndefined = true;
+      }
+    });
+    this.json.assets.forEach(asset => {
+      if (asset.layers) {
+        asset.layers.forEach(layer => {
+          if (layer.ind === undefined) {
+            isUndefined = true;
+          }
+        });
+      }
+    });
+    if (isUndefined) {
+      const report = {
+        message: '插件导出的lottie缺乏ind属性，会导致ios播放器会出现闪退',
+        rule: 'error_attr_ind_isUndefined',
+        element: RootElement,
+        type: 'error',
+        name: '风险',
+        incompatible: [ 'iOS' ],
+      };
+      this.reports.push(report);
+      this.json.reports = [ report ];
     }
   }
 
