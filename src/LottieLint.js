@@ -36,9 +36,9 @@ export default class LottieLint {
     }
   }
 
-  // 5.5.0+的识别规则，解决老版本兼容性问题。
+  // 5.5.0+的识别规则，解决老版本兼容性问题。此规则只在一定区间生效
   checkOldFormat() {
-    if (semver.gte(this.json.v, '5.5.0')) {
+    if (semver.gte(this.json.v, '5.5.0') && semver.lte(this.json.v, '5.6.8')) {
       const jsonData = JSON.stringify(this.json);
       const totalCount = (jsonData.match(/\"e\"/g) || []).length;
       const tmCount = (jsonData.match(/\"ty\"\:\"tm\"/g) || []).length; // tm 自带一个 e 路径变换

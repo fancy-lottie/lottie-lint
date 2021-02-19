@@ -17,6 +17,11 @@ describe('version linter', function() {
       },
     ]);
   });
+  it('未导出兼容版：超出5.6.9放弃检测', () => {
+    const lottieData = require('./case_data/wftnew5.6.9.json');
+    const reports = linter(lottieData).reports;
+    assert.deepStrictEqual(reports, []);
+  });
   it('5.5.0+版本判断细化, 连带渐变描边、渐变填充规则', () => {
     const lottieData = require('./case_data/gradient.json');
     const reports = linter(lottieData).reports;
@@ -94,7 +99,7 @@ describe('version linter', function() {
         name: 'LINE Copy备份 2.png',
         rule: 'incompatible_keyframes_size_undefined',
         type: 'incompatible',
-      }
+      },
     ]);
   });
   it('旧版本 小于 5.5.0', () => {
