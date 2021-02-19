@@ -11,7 +11,7 @@ describe('version linter', function() {
         message: '使用插件版本5.5.0+，客户端必须也是5.5.0+，ios/android旧版播放器会闪退',
         rule: 'warn_old_json_format',
         element: { asset: -1 },
-        type: 'warn',
+        type: 'incompatible',
         name: '风险',
         incompatible: [ 'iOS', 'Web', 'Android' ],
       },
@@ -25,7 +25,7 @@ describe('version linter', function() {
         message: '使用插件版本5.5.0+，客户端必须也是5.5.0+，ios/android旧版播放器会闪退',
         rule: 'warn_old_json_format',
         element: { asset: -1 },
-        type: 'warn',
+        type: 'incompatible',
         name: '风险',
         incompatible: [ 'iOS', 'Web', 'Android' ],
       },
@@ -83,7 +83,19 @@ describe('version linter', function() {
   it('导出兼容版本', () => {
     const lottieData = require('./case_data/compatibility.json');
     const reports = linter(lottieData).reports;
-    assert.deepStrictEqual(reports, []);
+    assert.deepStrictEqual(reports, [
+      {
+        element: {
+          asset: 4,
+          layer: 1,
+        },
+        incompatible: [ 'iOS' ],
+        message: '5.6.10以后版本缺省缩放属性导致ios可能无法播放',
+        name: 'LINE Copy备份 2.png',
+        rule: 'incompatible_keyframes_size_undefined',
+        type: 'incompatible',
+      }
+    ]);
   });
   it('旧版本 小于 5.5.0', () => {
     const matteJSON = require('./case_data/matte.json');

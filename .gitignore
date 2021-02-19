@@ -3,3 +3,5 @@ lib
 .nyc_output/
 coverage/
 *.tgz
+test/.DS_Store
+.DS_Store
