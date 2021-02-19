@@ -36,9 +36,9 @@ export default class LottieLint {
     }
   }
 
-  // 5.5.0+的识别规则，解决老版本兼容性问题。
+  // 5.5.0+的识别规则，解决老版本兼容性问题。此规则只在一定区间生效
   checkOldFormat() {
-    if (semver.gte(this.json.v, '5.5.0')) {
+    if (semver.gte(this.json.v, '5.5.0') && semver.lte(this.json.v, '5.6.8')) {
       const jsonData = JSON.stringify(this.json);
       const totalCount = (jsonData.match(/\"e\"/g) || []).length;
       const tmCount = (jsonData.match(/\"ty\"\:\"tm\"/g) || []).length; // tm 自带一个 e 路径变换
@@ -51,7 +51,7 @@ export default class LottieLint {
           message: '使用插件版本5.5.0+，客户端必须也是5.5.0+，ios/android旧版播放器会闪退',
           rule: 'warn_old_json_format',
           element: RootElement,
-          type: 'warn',
+          type: 'incompatible',
           name: '风险',
           incompatible: [ 'iOS', 'Web', 'Android' ],
         };
@@ -131,6 +131,20 @@ export default class LottieLint {
           message: '无效图层，进场时间大于动画结束时间，建议删除图层',
           type: 'error',
           rule: 'error_invalid_layer',
+          name: layer.nm,
+          element,
+        };
+        layer.reports.push(report);
+        this.reports.push(report);
+      }
+
+      // 校验5.6.10bodymovin删除的默认属性导致ios-oc版本无法播放,目前只针对图片检测
+      if (layer.ks && layer.ty === 2 && !layer.ks.s) {
+        const report = {
+          message: '5.6.10以后版本缺省缩放属性导致ios可能无法播放',
+          type: 'incompatible',
+          incompatible: [ 'iOS' ],
+          rule: 'incompatible_keyframes_size_undefined',
           name: layer.nm,
           element,
         };
