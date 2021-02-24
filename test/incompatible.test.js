@@ -17,10 +17,24 @@ describe('version linter', function() {
       },
     ]);
   });
-  it('未导出兼容版：超出5.6.9放弃检测', () => {
+  it('未导出兼容版：超出5.6.9放弃检测, 顺带检测sr', () => {
     const lottieData = require('./case_data/wftnew5.6.9.json');
     const reports = linter(lottieData).reports;
-    assert.deepStrictEqual(reports, []);
+    assert.deepStrictEqual(reports, [{
+      element: {
+        asset: 3,
+        layer: 0,
+      },
+      incompatible: [
+        'iOS',
+        'android',
+        'web',
+      ],
+      message: '时间伸缩的拉伸因子不为100%，客户端可能展示异常',
+      name: '惠.png 2',
+      rule: 'incompatible_sr_not_100',
+      type: 'incompatible',
+    }]);
   });
   it('5.5.0+版本判断细化, 连带渐变描边、渐变填充规则', () => {
     const lottieData = require('./case_data/gradient.json');
