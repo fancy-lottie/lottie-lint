@@ -152,6 +152,20 @@ export default class LottieLint {
         this.reports.push(report);
       }
 
+      // "sr"，时间伸缩属性在三端表现不一致
+      if (layer.sr && layer.sr !== 1) {
+        const report = {
+          message: '时间伸缩的拉伸因子不为100%，客户端可能展示异常',
+          type: 'incompatible',
+          incompatible: [ 'iOS', 'android', 'web' ],
+          rule: 'incompatible_sr_not_100',
+          name: layer.nm,
+          element,
+        };
+        layer.reports.push(report);
+        this.reports.push(report);
+      }
+
       // 校验 部分lottie文件存在无用图层
       if (layer.op < 0 || layer.op < parentNode.ip) {
         const report = {
