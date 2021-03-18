@@ -219,20 +219,6 @@ export default class LottieLint {
         this.reports.push(report);
       }
 
-      // TODO: Text 重新细化处理
-      // if (layer.ty === layerMapping.LayerType.Text) {
-      //   const report = {
-      //     message: '文字图层，在iOS、 Android 上只支持 Glyphs, Fonts, Transform, Fill, Stroke, Tracking',
-      //     type: 'incompatible',
-      //     incompatible: ['iOS', 'Android'],
-      //     rule: 'incompatible_text',
-      //     name: layer.nm,
-      //     path,
-      //   };
-      //   layer.reports.push(report);
-      //   this.reports.push(report);
-      // }
-
       // 存在遮罩层 应该进行提示
       if (util.hasMatte(layer)) {
         const report = {

@@ -1,6 +1,6 @@
 const assert = require('assert');
 
-import linter from '../src';
+import linter from '../src/index';
 
 describe('version linter', function() {
   it('未导出兼容版本', () => {

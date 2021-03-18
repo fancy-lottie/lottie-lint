@@ -1,6 +1,6 @@
 {
   "name": "lottie-lint",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "lottie json lint",
   "main": "lib/index.js",
   "scripts": {
@@ -8,8 +8,9 @@
     "lint": "eslint src test",
     "lint:fix": "npm run lint -- --fix",
     "test": "mocha --require intelli-espower-loader --require @babel/register --check-leaks -t 5000 test/*.test.js",
-    "test-cov": "nyc --reporter=clover --reporter=text-summary npm run test",
-    "test-travis": "npm run test-cov"
+    "cov": "nyc --reporter=clover --reporter=text-summary npm run test",
+    "cov:html": "nyc --reporter=html --reporter=text-summary npm run test",
+    "travis": "npm run cov"
   },
   "keywords": [
     "lottie",
@@ -39,8 +40,8 @@
     "eslint": "^7.22.0",
     "eslint-config-egg": "^9.0.0",
     "intelli-espower-loader": "^1.0.1",
-    "mocha": "^5.2.0",
-    "nyc": "^14.1.1",
+    "mocha": "^6.2.2",
+    "nyc": "^15.1.0",
     "power-assert": "^1.6.1"
   }
 }

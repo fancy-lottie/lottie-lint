@@ -3,11 +3,12 @@ module.exports = {
   parserOptions: {
     project: './tsconfig.eslint.json',
     sourceType: 'module',
-    createDefaultProgram: true
+    createDefaultProgram: true,
   },
   rules: {
-    'radix': 'off',
-    'semi': 'off',
+    radix: 'off',
+    semi: 'off',
+    camelcase: 'off',
     '@typescript-eslint/no-var-requires': 'off',
     'no-console': 'warn',
     'array-bracket-spacing': 'warn',
@@ -15,11 +16,10 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/member-ordering': 'off',
-    'camelcase': 'off',
     'no-underscore-dangle': 'off',
     'id-blacklist': 'off',
     'id-match': 'off',
-    'import/order': 'off'
+    'import/order': 'off',
   },
   globals: {
     window: true,

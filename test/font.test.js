@@ -1,7 +1,6 @@
-
 const assert = require('assert');
 
-import linter from '../src';
+import linter from '../src/index';
 
 describe('fonts linter', function() {
   it('无字体', () => {

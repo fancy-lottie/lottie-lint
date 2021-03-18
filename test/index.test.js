@@ -1,7 +1,6 @@
-
 const assert = require('assert');
 
-import linter from '../src';
+import linter from '../src/index';
 
 describe('linter', function() {
   it('检测样本一', () => {
