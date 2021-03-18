@@ -13,6 +13,7 @@ export default class LottieLint {
   }
 
   init() {
+    this.checkVersion();
     this.checkOldFormat();
     this.checkAttrIndIsUndefined();
     this.checkFonts();
