@@ -24,10 +24,11 @@ export default class LottieLint {
   checkVersion() {
     if (!semver.gte(this.json.v, '4.4.0')) {
       const report = {
-        message: 'Lottie only supports bodymovin >= 4.4.0',
-        rule: 'version',
+        message: 'bodymovin的插件建议高于5.5.0版本, 不支持4.4.0版本以下',
+        rule: 'bodymovin_version',
         element: RootElement,
         type: 'warn',
+        name: '风险',
         parentElement: RootElement,
       };
 
@@ -239,6 +240,25 @@ export default class LottieLint {
           message: '图层存在 “遮罩层” 特性，极其损耗性能，建议不使用，或用 “蒙版” 替代',
           type: 'error',
           rule: 'warn_matte_not_suggested',
+          name: layer.nm,
+          element,
+        };
+        layer.reports.push(report);
+        this.reports.push(report);
+      }
+
+      // 3d属性
+      if (
+        layer.ks?.rx
+        || layer.ks?.ry
+        || layer.ks?.rz
+        || layer.ks?.or
+      ) {
+        const report = {
+          message: '3d图层在native上暂不支持，在 iOS 和 Android 上不支持',
+          type: 'incompatible',
+          incompatible: [ 'iOS', 'Android' ],
+          rule: 'incompatible_3d_attr',
           name: layer.nm,
           element,
         };
