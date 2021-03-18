@@ -1,3 +1,5 @@
+import { hasOverflowImage, resetImageSize } from './utils/resetImageSize';
+import { hasImageBlank, resetImageBlank, hasImageBlankForLint } from './utils/resetImageBlank';
 
 const isImage = asset => {
   if (!asset) throw new Error('invel asset');
@@ -137,6 +139,45 @@ const areaStatistics = lottieFile => {
   });
 };
 
+/**
+ * 返回指定layer的直系儿子节点
+ * @param {*} layers 必须填写
+ * @param {*} layer 必须填写
+ */
+const getLayerChildren = (layers, layer) => {
+  if (!layers || !layers.length) {
+    return [];
+  }
+  const children = [];
+  const baseLayers = JSON.parse(JSON.stringify(layers));
+  baseLayers.forEach(item => {
+    if (item.parent === layer.ind) {
+      children.push(item);
+    }
+  });
+  return children;
+};
+
+// 获取子合成的名字
+const getAssetItemName = (lottieFile, id) => {
+  let name;
+  lottieFile.layers.forEach(item => {
+    if (item.refId === id) {
+      name = item.nm;
+    }
+  });
+  lottieFile.assets.forEach(asset => {
+    if (asset.layers) {
+      asset.layers.forEach(item => {
+        if (item.refId === id) {
+          name = item.nm;
+        }
+      });
+    }
+  });
+  return name;
+};
+
 export default {
   getAssetItemOp,
   getNode,
@@ -146,4 +187,11 @@ export default {
   layerMapping,
   layersCount, // 图层统计
   areaStatistics, // 绘制面积统计
+  getLayerChildren,
+  getAssetItemName,
+  hasOverflowImage,
+  resetImageSize,
+  hasImageBlank,
+  resetImageBlank,
+  hasImageBlankForLint,
 };

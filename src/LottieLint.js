@@ -1,8 +1,8 @@
 
 import semver from 'semver';
-import utils from './utils';
+import util from './util';
 
-const { layerMapping } = utils;
+const { layerMapping } = util;
 const RootElement = { asset: -1 };
 
 export default class LottieLint {
@@ -112,10 +112,10 @@ export default class LottieLint {
   checkLayers(layers, parentElement) {
 
     // 对assets里面对对象的ip op 进行校正
-    const parentNode = utils.getNode(this.json, parentElement);
+    const parentNode = util.getNode(this.json, parentElement);
     if (parentNode.op === undefined) {
       parentNode.ip = 0;
-      parentNode.op = utils.getAssetItemOp(this.json, parentNode.id);
+      parentNode.op = util.getAssetItemOp(this.json, parentNode.id);
     }
 
     layers.forEach((layer, index) => {
@@ -234,7 +234,7 @@ export default class LottieLint {
       // }
 
       // 存在遮罩层 应该进行提示
-      if (utils.hasMatte(layer)) {
+      if (util.hasMatte(layer)) {
         const report = {
           message: '图层存在 “遮罩层” 特性，极其损耗性能，建议不使用，或用 “蒙版” 替代',
           type: 'error',
@@ -253,6 +253,25 @@ export default class LottieLint {
           type: 'incompatible',
           incompatible: [ 'Web', 'Android' ],
           rule: 'incompatible_auto_orient',
+          name: layer.nm,
+          element,
+        };
+        layer.reports.push(report);
+        this.reports.push(report);
+      }
+
+      // 3d属性
+      if (
+        layer.ks?.rx
+        || layer.ks?.ry
+        || layer.ks?.rz
+        || layer.ks?.or
+      ) {
+        const report = {
+          message: '3d图层在native上暂不支持，在 iOS 和 Android 上不支持',
+          type: 'incompatible',
+          incompatible: [ 'iOS', 'Android' ],
+          rule: 'incompatible_3d_attr',
           name: layer.nm,
           element,
         };
@@ -358,7 +377,7 @@ export default class LottieLint {
   checkAssets() {
     const assets = this.json.assets || [];
     assets.forEach((asset, index) => {
-      if (!utils.isPrecomp(asset)) return;
+      if (!util.isPrecomp(asset)) return;
       this.checkLayers(asset.layers, { asset: index });
     });
   }
