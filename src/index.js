@@ -1,4 +1,3 @@
-
 import Standard from './core/standard';
 import Browser from './core/browser';
 import Other from './core/other';
@@ -16,7 +15,7 @@ export default {
   },
   // 带检测属性给滤过的标准执行判断
   low(jsonData, config) {
-    const browser = this.lintBrowser(jsonData);
+    const browser = this.browser(jsonData);
     const other = new Other(jsonData).getResult();
     return Low.getResult(jsonData, browser, other, config).getResult();
   },

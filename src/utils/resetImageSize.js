@@ -56,10 +56,13 @@ function hasOverflowImage(lottieFile, Threshold = 95) {
     if (item.id && item.p && item.p.length) {
       const maxSize = getItemsMaxSize(item, newLottieFile);
       if (maxSize < Threshold) {
+        const nm = util.getAssetItemName(newLottieFile, item.id)
         hasImage.push({
-          nm: util.getAssetItemName(newLottieFile, item.id),
-          p: item.p,
-          maxSize,
+          message: `${nm} 图片实际使用尺寸为原图的${maxSize}%，建议优化`,
+          rule: 'info_image_oversize',
+          element: { asset: -1 },
+          type: 'info',
+          name: `图片资源-${nm}`,
         });
       }
     }
