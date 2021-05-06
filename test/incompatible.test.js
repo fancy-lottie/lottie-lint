@@ -2,10 +2,10 @@ const assert = require('assert');
 
 import linter from '../src/index';
 
-describe('version linter', function() {
+describe('version linter.standard', function() {
   it('未导出兼容版本', () => {
     const lottieData = require('./case_data/wftnew.json');
-    const reports = linter(lottieData).reports;
+    const reports = linter.standard(lottieData).reports;
     assert.deepStrictEqual(reports, [
       {
         message: '使用插件版本5.5.0+，客户端必须也是5.5.0+，ios/android旧版播放器会闪退',
@@ -19,7 +19,7 @@ describe('version linter', function() {
   });
   it('未导出兼容版：超出5.6.9放弃检测, 顺带检测sr', () => {
     const lottieData = require('./case_data/wftnew5.6.9.json');
-    const reports = linter(lottieData).reports;
+    const reports = linter.standard(lottieData).reports;
     assert.deepStrictEqual(reports, [{
       element: {
         asset: 3,
@@ -38,7 +38,7 @@ describe('version linter', function() {
   });
   it('5.5.0+版本判断细化, 连带渐变描边、渐变填充规则', () => {
     const lottieData = require('./case_data/gradient.json');
-    const reports = linter(lottieData).reports;
+    const reports = linter.standard(lottieData).reports;
     assert.deepStrictEqual(reports, [
       {
         message: '使用插件版本5.5.0+，客户端必须也是5.5.0+，ios/android旧版播放器会闪退',
@@ -101,7 +101,7 @@ describe('version linter', function() {
   });
   it('导出兼容版本', () => {
     const lottieData = require('./case_data/compatibility.json');
-    const reports = linter(lottieData).reports;
+    const reports = linter.standard(lottieData).reports;
     assert.deepStrictEqual(reports, [
       {
         element: {
@@ -118,7 +118,7 @@ describe('version linter', function() {
   });
   it('旧版本 小于 5.5.0', () => {
     const matteJSON = require('./case_data/matte.json');
-    const reports = linter(matteJSON).reports;
+    const reports = linter.standard(matteJSON).reports;
 
     assert.deepStrictEqual(reports, [
       {

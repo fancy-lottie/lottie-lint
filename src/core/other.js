@@ -3,46 +3,68 @@
  * @水映天辙
  */
 
+// 根据id获取指定的assetItem的下标
+const getAssetsItemIndexFundById = (lottieFile, id) => {
+  let zindex = 0;
+  lottieFile.assets.forEach((item, index) => {
+    if (item.id === id) {
+      zindex = index;
+    }
+  });
+  return zindex;
+};
+
 // 根据id获取指定的assetItem
 const getAssetsItemFundById = (lottieFile, id) => {
   if (id === undefined || id < 0) {
     return lottieFile;
   }
-  const zindex = this.getAssetsItemIndexFundById(lottieFile, id);
+  const zindex = getAssetsItemIndexFundById(lottieFile, id);
   return lottieFile.assets[zindex];
 };
 
 
 // 遍历图片图层的关键帧和属性，获取当前图层的极大值
 const getMaxWHSize = item => {
-  let w = 0;
-  let h = 0;
+  let w = 100;
+  let h = 100;
   // TODO: 图片只是初始化属性的设置
   const itemSK = item.ks && item.ks.s && item.ks.s.k && item.ks.s.k;
   if (itemSK && itemSK.length) {
     if (typeof itemSK[0] === 'number') {
-      return [ Math.abs(itemSK[0]), Math.abs(itemSK[1]) ];
+      w = Math.abs(itemSK[0]);
+      h = Math.abs(itemSK[1]);
+    } else {
+      itemSK.forEach(it => {
+        if (it.s && it.s[0] !== undefined) {
+          const e0 = Math.abs(it.e && it.e[0]) || 0;
+          const e1 = Math.abs(it.e && it.e[1]) || 0;
+          w = Math.max(Math.abs(it.s && it.s[0]), e0, w);
+          h = Math.max(Math.abs(it.s && it.s[1]), e1, h);
+        }
+      });
     }
-    itemSK.forEach(it => {
-      if (it.s && it.s[0] !== undefined) {
-        w = Math.max(Math.abs(it.s && it.s[0]), Math.abs(it.e && it.e[0]), w);
-        h = Math.max(Math.abs(it.s && it.s[1]), Math.abs(it.e && it.e[1]), h);
-      }
-    });
   }
-  return [ w, h ];
+  return { w: w / 100, h: h / 100 };
 }
 
 // 遍历图片图层的第一帧的宽高
 const getFirstWHSize = item => {
+  let w = 100;
+  let h = 100;
   // TODO: 图片只是初始化属性的设置
   const itemSK = item.ks && item.ks.s && item.ks.s.k && item.ks.s.k;
   if (itemSK && itemSK.length) {
     if (typeof itemSK[0] === 'number') {
-      return [ Math.abs(itemSK[0]), Math.abs(itemSK[1]) ];
+      w = Math.abs(itemSK[0]);
+      h = Math.abs(itemSK[1]);
+    } else {
+      w = Math.abs(itemSK[0].s[0]);
+      h = Math.abs(itemSK[0].s[1]);
     }
-    return [ Math.abs(itemSK[0].s[0]), Math.abs(itemSK[0].s[1]) ];
   }
+  // 如果捕获不到s属性，说明是默认的[100, 100, 100];
+  return { w: w / 100, h: h / 100 };
 }
 
 export default class LottieLintOther {
@@ -66,24 +88,26 @@ export default class LottieLintOther {
       compnent.layers.forEach(layer => {
         // 图片内存消耗的统计
         if (layer.ty === 2) {
+          const { w, h } = getAssetsItemFundById(lottieFile, layer.refId);
+          const imageArea = w * h;
           // 启动内存队列
           const firstWH = getFirstWHSize(layer);
-          startRAM.push(firstWH.w * firstWH.h);
+          const firstFrameRAM = firstWH.w * firstWH.h * imageArea;
+          startRAM.push(firstFrameRAM);
 
           // 最大内存队列
           const maxWH = getMaxWHSize(layer);
-          maxRAM.push(maxWH.w * maxWH.h);
+          maxRAM.push(maxWH.w * maxWH.h * imageArea);
 
           // 运行时内存消耗队列
           const tempRuntimeRAM = [];
-          const { w, h } = getAssetsItemFundById(lottieFile, layer.refId);
           const newIp = ip + layer.ip;
           const newOp = op + layer.op;
           for (let i = 0; i < newOp; i++) {
             if (i < newIp) {
-              tempRuntimeRAM.push(firstWH.w * firstWH.h);
+              tempRuntimeRAM.push(firstFrameRAM);
             } else {
-              tempRuntimeRAM.push(w * h);
+              tempRuntimeRAM.push(imageArea);
             }
           }
           runtimeRAM.push(tempRuntimeRAM);
@@ -98,7 +122,11 @@ export default class LottieLintOther {
       })
     }
     roopLayers(lottieFile, 0, 0);
-    return lottieFile;
+    return {
+      startRAM,
+      runtimeRAM,
+      maxRAM,
+    };
   }
 
   getResult() {

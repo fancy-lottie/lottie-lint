@@ -2,10 +2,10 @@ const assert = require('assert');
 
 import linter from '../src/index';
 
-describe('linter', function() {
+describe('linter.standard', function() {
   it('检测样本一', () => {
     const matteJSON = require('./case_data/matte.json');
-    const reports = linter(matteJSON).reports;
+    const reports = linter.standard(matteJSON).reports;
 
     assert.deepStrictEqual(reports, [
       {
@@ -33,7 +33,7 @@ describe('linter', function() {
 
   it('检测样本二', () => {
     const matteJSON = require('./case_data/layerEffects.json');
-    const reports = linter(matteJSON).reports;
+    const reports = linter.standard(matteJSON).reports;
 
     assert.deepStrictEqual(reports, [
       {
