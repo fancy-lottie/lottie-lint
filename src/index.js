@@ -1,7 +1,7 @@
 import Standard from './core/standard';
 import Browser from './core/browser';
 import Other from './core/other';
-import Low from './core/low';
+import Law from './core/law';
 
 export default {
   // 基础的校验结构
@@ -14,9 +14,9 @@ export default {
     return new Browser(standard.getResult()).getResult();
   },
   // 带检测属性给滤过的标准执行判断
-  low(jsonData, config) {
+  law(jsonData, config) {
     const browser = this.browser(jsonData);
     const other = new Other(jsonData).getResult();
-    return Low.getResult(jsonData, browser, other, config).getResult();
+    return Law.getResult(jsonData, browser, other, config).getResult();
   },
 };
