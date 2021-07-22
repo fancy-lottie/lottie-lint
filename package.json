@@ -1,13 +1,13 @@
 {
   "name": "lottie-lint",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "lottie json lint",
   "main": "lib/index.js",
   "scripts": {
     "build": "rm -fr ./lib && babel src -d lib",
     "lint": "eslint src test",
     "test": "mocha --require intelli-espower-loader --require @babel/register --check-leaks -t 5000 test/*.test.js",
-    "test-cov": "nyc --reporter=clover --reporter=text-summary npm run test",
+    "cov": "nyc --reporter=clover --reporter=text-summary npm run test",
     "test-travis": "npm run test-cov"
   },
   "keywords": [

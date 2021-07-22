@@ -137,6 +137,26 @@ const areaStatistics = lottieFile => {
   });
 };
 
+// 获取子合成的名字
+const getAssetItemName = (lottieFile, id) => {
+  let name;
+  lottieFile.layers.forEach(item => {
+    if (item.refId === id) {
+      name = item.nm;
+    }
+  });
+  lottieFile.assets.forEach(asset => {
+    if (asset.layers) {
+      asset.layers.forEach(item => {
+        if (item.refId === id) {
+          name = item.nm;
+        }
+      });
+    }
+  });
+  return name;
+};
+
 export default {
   getAssetItemOp,
   getNode,
@@ -146,4 +166,5 @@ export default {
   layerMapping,
   layersCount, // 图层统计
   areaStatistics, // 绘制面积统计
+  getAssetItemName,
 };

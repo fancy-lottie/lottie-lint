@@ -19,6 +19,7 @@ export default class LottieLint {
     this.checkFonts();
     this.checkLayers(this.json.layers, { asset: -1 });
     this.checkAssets();
+    this.checkImageRAM();
   }
 
   checkVersion() {
@@ -107,6 +108,34 @@ export default class LottieLint {
       };
       this.reports.push(report);
     }
+  }
+
+  // 排查超大图层
+  checkImageRAM() {
+    (this.json.assets || []).forEach(asset => {
+      const { p, w, h, id } = asset;
+      if (p) {
+        const ram = w * h;
+        if (ram >= 1100000) {
+          const report = {
+            message: '资产中存在占用内存大的图片，其尺寸超过1000x1100',
+            type: 'info',
+            rule: 'large_image_oom',
+            name: utils.getAssetItemName(this.json, id),
+            element: RootElement,
+          };
+          if (ram >= 4000000) {
+            report.message = '资产中存在占用内存大的图片，其尺寸超过2000x2000';
+            report.type = 'warn';
+          }
+          if (ram >= 9000000) {
+            report.message = '资产中存在占用内存大的图片，其尺寸超过3000x3000';
+            report.type = 'error';
+          }
+          this.reports.push(report);
+        }
+      }
+    });
   }
 
   // 层的分解

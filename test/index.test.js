@@ -29,6 +29,33 @@ describe('linter', function() {
           layer: 2,
         },
       },
+      {
+        element: {
+          asset: -1,
+        },
+        message: "资产中存在占用内存大的图片，其尺寸超过3000x3000",
+        name: "盖子上.png",
+        rule: "large_image_oom",
+        type: "error",
+      },
+      {
+        element: {
+          asset: -1,
+        },
+        message: "资产中存在占用内存大的图片，其尺寸超过2000x2000",
+        name: "盖子下.png",
+        rule: "large_image_oom",
+        type: "warn",
+      },
+      {
+        element: {
+          asset: -1,
+        },
+        message: "资产中存在占用内存大的图片，其尺寸超过1000x1100",
+        name: "底部.png",
+        rule: "large_image_oom",
+        type: "info",
+      },
     ]);
   });
 
