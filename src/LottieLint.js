@@ -118,18 +118,18 @@ export default class LottieLint {
         const ram = w * h;
         if (ram >= 1024 * 1024) {
           const report = {
-            message: '资产中存在占用内存大的图片，其尺寸超过1000x1100',
+            message: '资产中存在占用内存大的图片，其尺寸超过1024x1024',
             type: 'info',
             rule: 'large_image_oom',
             name: utils.getAssetItemName(this.json, id),
             element: RootElement,
           };
           if (ram >= 1536 * 1536) {
-            report.message = '资产中存在占用内存大的图片，其尺寸超过2000x2000';
+            report.message = '资产中存在占用内存大的图片，其尺寸超过1536x1536';
             report.type = 'warn';
           }
           if (ram >= 2048 * 2048) {
-            report.message = '资产中存在占用内存大的图片，其尺寸超过3000x3000';
+            report.message = '资产中存在占用内存大的图片，其尺寸超过2048x2048';
             report.type = 'error';
           }
           this.reports.push(report);
