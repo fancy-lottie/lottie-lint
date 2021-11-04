@@ -1,5 +1,5 @@
 module.exports = {
-  extends: 'eslint-config-egg',
+  extends: 'eslint-config-eslint',
   parserOptions: {
     project: './tsconfig.eslint.json',
     sourceType: 'module',
@@ -20,6 +20,10 @@ module.exports = {
     'id-blacklist': 'off',
     'id-match': 'off',
     'import/order': 'off',
+    'node/no-unsupported-features/es-syntax': ['off', {
+      'version': '>=8.0.0',
+      'ignores': []
+    }]
   },
   globals: {
     window: true,
@@ -27,4 +31,3 @@ module.exports = {
     Image: true,
   },
 }
-
