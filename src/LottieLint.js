@@ -187,8 +187,22 @@ export default class LottieLint {
         const report = {
           message: '时间伸缩的拉伸因子不为100%，客户端可能展示异常',
           type: 'incompatible',
-          incompatible: [ 'iOS', 'android', 'web' ],
+          incompatible: [ 'iOS', 'Android', 'Web' ],
           rule: 'incompatible_sr_not_100',
+          name: layer.nm,
+          element,
+        };
+        layer.reports.push(report);
+        this.reports.push(report);
+      }
+
+      // "bm"，android不支持图层混合模式
+      if (layer.bm !== layerMapping.blendModeType.normal) {
+        const report = {
+          message: `android不支持图层混合模式-${layerMapping.blendModeType.chinese[layer.bm]}`,
+          type: 'incompatible',
+          incompatible: [ 'Android' ],
+          rule: 'incompatible_bm',
           name: layer.nm,
           element,
         };
@@ -278,10 +292,11 @@ export default class LottieLint {
 
       // 3d属性
       if (
-        layer.ks?.rx
-        || layer.ks?.ry
-        || layer.ks?.rz
-        || layer.ks?.or
+        layer.ks &&
+        layer.ks.rx
+        || layer.ks.ry
+        || layer.ks.rz
+        || layer.ks.or
       ) {
         const report = {
           message: '3d图层在native上暂不支持，在 iOS 和 Android 上不支持',

@@ -48,6 +48,43 @@ const layerMapping = {
     Darken: 'd',
     Difference: 'f',
   },
+
+  blendModeType: {
+    normal: 0,
+    multiply: 1,
+    screen: 2,
+    overlay: 3,
+    darken: 4,
+    lighten: 5,
+    colorDodge: 6,
+    colorBurn: 7,
+    hardLight: 8,
+    softLight: 9,
+    difference: 10,
+    exclusion: 11,
+    hue: 12,
+    saturation: 13,
+    color: 14,
+    luminosity: 15,
+    chinese: {
+      0: '正常',
+      1: '相乘',
+      2: '屏幕',
+      3: '覆盖',
+      4: '变暗',
+      5: '变亮',
+      6: '颜色减淡',
+      7: '颜色加深',
+      8: '强光',
+      9: '柔光',
+      10: '差值',
+      11: '经典差值',
+      12: '色相',
+      13: '饱和度',
+      14: '颜色',
+      15: '光度',
+    },
+  },
 };
 
 // 获取assetsItem的帧结束时间, 注: 帧的结束时间取自层的(op-st)/sr;
@@ -85,6 +122,7 @@ const getAssetItemOp = (lottieFile, id) => {
  *   type: String;  // 非必填属性 undefined || 类型，用于辅助快速定位，在结构化以后会帮忙导出
  *   ty: String;  // 非必填属性 undefined || 类型，type的辅助属性
  * }
+ * @return {function} element
  **/
 const getNode = (lottieFile, Element) => {
   let node = lottieFile;

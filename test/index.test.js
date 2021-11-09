@@ -33,28 +33,28 @@ describe('linter', function() {
         element: {
           asset: -1,
         },
-        message: "资产中存在占用内存大的图片，其尺寸超过2048x2048",
-        name: "盖子上.png",
-        rule: "large_image_oom",
-        type: "error",
+        message: '资产中存在占用内存大的图片，其尺寸超过2048x2048',
+        name: '盖子上.png',
+        rule: 'large_image_oom',
+        type: 'error',
       },
       {
         element: {
           asset: -1,
         },
-        message: "资产中存在占用内存大的图片，其尺寸超过1536x1536",
-        name: "盖子下.png",
-        rule: "large_image_oom",
-        type: "warn",
+        message: '资产中存在占用内存大的图片，其尺寸超过1536x1536',
+        name: '盖子下.png',
+        rule: 'large_image_oom',
+        type: 'warn',
       },
       {
         element: {
           asset: -1,
         },
-        message: "资产中存在占用内存大的图片，其尺寸超过1024x1024",
-        name: "底部.png",
-        rule: "large_image_oom",
-        type: "info",
+        message: '资产中存在占用内存大的图片，其尺寸超过1024x1024',
+        name: '底部.png',
+        rule: 'large_image_oom',
+        type: 'info',
       },
     ]);
   });
@@ -142,6 +142,19 @@ describe('linter', function() {
         element: {
           asset: -1,
           layer: 10,
+        },
+      },
+      {
+        message: 'android不支持图层混合模式-变暗',
+        incompatible: [
+          'Android',
+        ],
+        type: 'incompatible',
+        rule: 'incompatible_bm',
+        name: 'shadow',
+        element: {
+          asset: -1,
+          layer: 11,
         },
       },
       {

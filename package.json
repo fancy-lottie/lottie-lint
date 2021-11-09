@@ -1,6 +1,6 @@
 {
   "name": "lottie-lint",
-  "version": "1.1.9",
+  "version": "1.2.0",
   "description": "lottie json lint",
   "main": "lib/index.js",
   "scripts": {
@@ -35,7 +35,7 @@
     "@babel/preset-env": "^7.6.0",
     "@babel/register": "^7.6.0",
     "eslint": "^5.15.3",
-    "eslint-config-egg": "^7.2.0",
+    "eslint-config-egg": "7.2.0",
     "intelli-espower-loader": "^1.0.1",
     "mocha": "^5.2.0",
     "nyc": "^14.1.1",

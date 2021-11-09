@@ -27,8 +27,8 @@ describe('version linter', function() {
       },
       incompatible: [
         'iOS',
-        'android',
-        'web',
+        'Android',
+        'Web',
       ],
       message: '时间伸缩的拉伸因子不为100%，客户端可能展示异常',
       name: '惠.png 2',
@@ -145,28 +145,28 @@ describe('version linter', function() {
         element: {
           asset: -1,
         },
-        message: "资产中存在占用内存大的图片，其尺寸超过2048x2048",
-        name: "盖子上.png",
-        rule: "large_image_oom",
-        type: "error",
+        message: '资产中存在占用内存大的图片，其尺寸超过2048x2048',
+        name: '盖子上.png',
+        rule: 'large_image_oom',
+        type: 'error',
       },
       {
         element: {
           asset: -1,
         },
-        message: "资产中存在占用内存大的图片，其尺寸超过1536x1536",
-        name: "盖子下.png",
-        rule: "large_image_oom",
-        type: "warn",
+        message: '资产中存在占用内存大的图片，其尺寸超过1536x1536',
+        name: '盖子下.png',
+        rule: 'large_image_oom',
+        type: 'warn',
       },
       {
         element: {
           asset: -1,
         },
-        message: "资产中存在占用内存大的图片，其尺寸超过1024x1024",
-        name: "底部.png",
-        rule: "large_image_oom",
-        type: "info",
+        message: '资产中存在占用内存大的图片，其尺寸超过1024x1024',
+        name: '底部.png',
+        rule: 'large_image_oom',
+        type: 'info',
       },
     ]);
   });
