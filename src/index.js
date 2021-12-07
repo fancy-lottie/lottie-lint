@@ -4,7 +4,6 @@ import Other from "./core/other";
 import Law from "./core/law";
 
 export default {
-
     // 基础的校验结构
     standard(jsonData) {
         return new Standard(jsonData).getResult();
